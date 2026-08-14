@@ -1,15 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import DashboardHeader from '../components/DashboardHeader'
 import ChartCard from '../components/ChartCard'
 import MetricCard from '../components/MetricCard'
 import ProcessTable from '../components/ProcessTable'
-
-const initialMetrics = [
-  { label: 'CPU', value: 42, unit: '%', detail: 'Normal workload', tone: 'blue' },
-  { label: 'Memory', value: 61, unit: '%', detail: '9.8 GB of 16 GB', tone: 'purple' },
-  { label: 'GPU', value: 37, unit: '%', detail: 'Available in a later stage', tone: 'pink' },
-  { label: 'Disk', value: 73, unit: '%', detail: '348 GB of 476 GB', tone: 'orange' },
-]
 
 const chartData = {
   cpu: [32, 41, 38, 48, 36, 51, 42],
@@ -22,33 +16,51 @@ function createChartPoints(values) {
 }
 
 function DashboardPage() {
-  const [metrics, setMetrics] = useState(initialMetrics)
+  const [metrics, setMetrics] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [error, setError] = useState('')
+  const [lastUpdated, setLastUpdated] = useState('')
 
-  function refreshSampleData() {
+  async function loadMetrics() {
     setIsRefreshing(true)
-
-    window.setTimeout(() => {
-      setMetrics((currentMetrics) =>
-        currentMetrics.map((metric) => ({
-          ...metric,
-          value: Math.floor(Math.random() * 61) + 20,
-        })),
-      )
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/metrics/')
+      const { cpu, memory, disk } = response.data
+      setMetrics([
+        { label: 'CPU', value: cpu.percent, unit: '%', detail: `${cpu.logical_cores} logical cores`, tone: 'blue' },
+        { label: 'Memory', value: memory.percent, unit: '%', detail: `${memory.used_gb} GB of ${memory.total_gb} GB`, tone: 'purple' },
+        { label: 'GPU', value: 'N/A', unit: '', detail: 'Not available yet', tone: 'pink' },
+        { label: 'Disk', value: disk.percent, unit: '%', detail: `${disk.free_gb} GB free`, tone: 'orange' },
+      ])
+      setLastUpdated(new Date().toLocaleTimeString())
+      setError('')
+    } catch {
+      setError('Cannot reach the Django API. Make sure it is running on port 8000.')
+    } finally {
+      setIsLoading(false)
       setIsRefreshing(false)
-    }, 500)
+    }
+  }
+
+  useEffect(() => {
+    loadMetrics()
+    const pollId = window.setInterval(loadMetrics, 5000)
+    return () => window.clearInterval(pollId)
+  }, [])
+
+  if (isLoading) {
+    return <main className="dashboard-shell"><p className="loading-message">Loading real PC metrics…</p></main>
   }
 
   return (
     <main className="dashboard-shell">
-      <DashboardHeader isRefreshing={isRefreshing} onRefresh={refreshSampleData} />
+      <DashboardHeader isRefreshing={isRefreshing} onRefresh={loadMetrics} />
+      {error && <p className="error-message">{error}</p>}
       <section className="metrics-section" aria-labelledby="overview-title">
         <div className="section-heading">
-          <div>
-            <p className="eyebrow">OVERVIEW</p>
-            <h2 id="overview-title">Current performance</h2>
-          </div>
-          <p>Sample values for learning React</p>
+          <div><p className="eyebrow">OVERVIEW</p><h2 id="overview-title">Current performance</h2></div>
+          <p>{lastUpdated ? `Updated at ${lastUpdated}` : 'Waiting for data'}</p>
         </div>
         <div className="metric-grid">
           {metrics.map((metric) => <MetricCard key={metric.label} {...metric} />)}
@@ -63,7 +75,7 @@ function DashboardPage() {
         <ProcessTable />
         <section className="system-card">
           <p className="eyebrow">SYSTEM</p><h2>Device summary</h2>
-          <dl><div><dt>Operating system</dt><dd>Windows 11</dd></div><div><dt>Uptime</dt><dd>3 days, 6 hours</dd></div><div><dt>Connection</dt><dd><span className="status-badge"><i />Online</span></dd></div></dl>
+          <dl><div><dt>Operating system</dt><dd>Available from API</dd></div><div><dt>Uptime</dt><dd>Available from API</dd></div><div><dt>Connection</dt><dd><span className="status-badge"><i />Online</span></dd></div></dl>
         </section>
       </div>
     </main>
