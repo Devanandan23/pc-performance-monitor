@@ -1,65 +1,28 @@
-import { useState } from 'react'
-import DashboardHeader from './components/DashboardHeader'
-import MetricCard from './components/MetricCard'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout'
+import DashboardPage from './pages/DashboardPage'
+import PlaceholderPage from './pages/PlaceholderPage'
 import './App.css'
 
-const initialMetrics = [
-  { label: 'CPU', value: 42, unit: '%', detail: 'Normal workload', tone: 'blue' },
-  { label: 'Memory', value: 61, unit: '%', detail: '9.8 GB of 16 GB', tone: 'purple' },
-  { label: 'GPU', value: 37, unit: '%', detail: 'Available in a later stage', tone: 'pink' },
-  { label: 'Disk', value: 73, unit: '%', detail: '348 GB of 476 GB', tone: 'orange' },
-]
-
 function App() {
-  const [metrics, setMetrics] = useState(initialMetrics)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-
-  function refreshSampleData() {
-    setIsRefreshing(true)
-
-    window.setTimeout(() => {
-      setMetrics((currentMetrics) =>
-        currentMetrics.map((metric) => ({
-          ...metric,
-          value: Math.floor(Math.random() * 61) + 20,
-        })),
-      )
-      setIsRefreshing(false)
-    }, 500)
-  }
-
   return (
-    <main className="dashboard-shell">
-      <DashboardHeader
-        isRefreshing={isRefreshing}
-        onRefresh={refreshSampleData}
-      />
-
-      <section className="metrics-section" aria-labelledby="overview-title">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">OVERVIEW</p>
-            <h2 id="overview-title">Current performance</h2>
-          </div>
-          <p>Sample values for learning React</p>
-        </div>
-
-        <div className="metric-grid">
-          {metrics.map((metric) => (
-            <MetricCard key={metric.label} {...metric} />
-          ))}
-        </div>
-      </section>
-
-      <section className="learning-note">
-        <p className="eyebrow">STAGE 2</p>
-        <h2>Your first React dashboard</h2>
-        <p>
-          These values are intentionally sample data. In a later stage, Python
-          will collect the real values from your PC.
-        </p>
-      </section>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/cpu" element={<PlaceholderPage title="CPU" description="CPU usage, per-core details, and history will appear here." />} />
+          <Route path="/memory" element={<PlaceholderPage title="Memory" description="RAM usage and memory-heavy processes will appear here." />} />
+          <Route path="/gpu" element={<PlaceholderPage title="GPU" description="GPU data will be shown only when your hardware provides it." />} />
+          <Route path="/storage" element={<PlaceholderPage title="Storage" description="Disk partitions and storage usage will appear here." />} />
+          <Route path="/processes" element={<PlaceholderPage title="Processes" description="A searchable list of running processes will appear here." />} />
+          <Route path="/alerts" element={<PlaceholderPage title="Alerts" description="Configured warning and critical alerts will appear here." />} />
+          <Route path="/system-info" element={<PlaceholderPage title="System information" description="Your operating system and hardware details will appear here." />} />
+          <Route path="/settings" element={<PlaceholderPage title="Settings" description="Refresh, theme, and alert preferences will appear here." />} />
+          <Route path="/custom" element={<PlaceholderPage title="Custom page" description="This is reserved for the feature you choose later." />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
