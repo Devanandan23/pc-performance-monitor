@@ -284,3 +284,361 @@ td strong, td span { display: block; } td span { margin-top: 3px; color: #64748b
 .loading-message, .error-message { padding: 16px; border-radius: 10px; }
 .loading-message { color: #bae6fd; background: #172033; }
 .error-message { margin: 20px 0 0; color: #fecaca; background: #451a1a; }
+
+
+
+
+.storage-progress {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+.storage-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #38bdf8,
+    #a78bfa
+  );
+  border-radius: inherit;
+  transition: width 0.5s ease;
+}
+
+.storage-progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+
+.alert-status {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.alert-status.healthy {
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+}
+
+.alert-status.warning {
+  background: rgba(250, 204, 21, 0.12);
+  color: #facc15;
+}
+
+.alert-status.critical {
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+}
+
+.no-alerts {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.alert-check {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.no-alerts p {
+  margin: 6px 0 0;
+  color: #94a3b8;
+}
+
+.alert-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.alert-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.alert-item p {
+  margin: 5px 0 0;
+  color: #94a3b8;
+}
+
+.alert-item span {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.alert-item.warning {
+  background: rgba(250, 204, 21, 0.08);
+  border: 1px solid rgba(250, 204, 21, 0.2);
+}
+
+.alert-item.warning span {
+  color: #facc15;
+}
+
+.alert-item.critical {
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+.alert-item.critical span {
+  color: #f87171;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.settings-card {
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-card h2 {
+  margin: 6px 0 8px;
+}
+
+.settings-description {
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.settings-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: #cbd5e1;
+}
+
+.settings-label select,
+.settings-label input {
+  margin-left: auto;
+  width: 130px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+}
+
+.settings-label span {
+  margin-left: -8px;
+}
+
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.primary-button {
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 9px;
+  background: #38bdf8;
+  color: #020617;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 800px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   CPU PAGE
+========================================================= */
+
+.cpu-history {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.cpu-history-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 60px;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+}
+
+.cpu-history-row > span {
+  color: #94a3b8;
+}
+
+.cpu-history-row strong {
+  text-align: right;
+}
+
+.cpu-history-bar {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cpu-history-fill {
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+
+/* =========================================================
+   CPU CORE GRID
+========================================================= */
+
+.core-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.core-card {
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 12px;
+}
+
+.core-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.core-header span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.core-header strong {
+  font-size: 14px;
+}
+
+.core-bar {
+  width: 100%;
+  height: 7px;
+  background: #1e293b;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.core-bar-fill {
+  height: 100%;
+  background: #a78bfa;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+
+/* =========================================================
+   RESPONSIVE CPU PAGE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .cpu-history-row {
+    grid-template-columns: 75px 1fr 50px;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .core-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   ACTIVITY PROCESS SEARCH
+========================================================= */
+
+.process-search {
+  width: 220px;
+  height: 40px;
+  padding: 0 13px;
+
+  border: 1px solid #253047;
+  border-radius: 9px;
+
+  background: #172033;
+  color: #e2e8f0;
+
+  font: inherit;
+  font-size: 0.82rem;
+
+  outline: none;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.process-search::placeholder {
+  color: #64748b;
+}
+
+.process-search:hover {
+  border-color: #334155;
+}
+
+.process-search:focus {
+  border-color: #38bdf8;
+  background: #111827;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+.card-title-row > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .process-search {
+    width: 180px;
+  }
+}
